@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 ```
 
 # Flood-modelling
-
+### Authors: Jhony Sánchez & Rodrigo Malagón
 <!-- badges: start -->
 <!-- badges: end -->
 
@@ -75,10 +75,10 @@ Due to processing limitations, we select a subset of $5000$ labelled tiles to ca
 path_to_imgs <- './Data/10300100FAA4CA00/tiles_image/'
 path_to_masks <- './Data/10300100FAA4CA00/tiles_labels/'
 
-(files <- data.frame(
+files <- data.frame(
   img_path = list.files(path_to_imgs, full.names = TRUE, pattern = "*.TIF$"),
   mask_path = list.files(path_to_masks, full.names = TRUE, pattern = "*.TIF$")
-))
+)
 files<-files[1:5000,]
 ```
 
@@ -92,21 +92,20 @@ files$mask <- lapply(files$mask_path,extract_mask)
 
 
 files$img <- lapply(files$img,normalize_matrix)
-head(files)
 ```
 
 We filter the tiles with a $128\times 128-$size to produce a uniform dataset to be fed to the CNN. Furthermore, we enrich our dataset with an extracted *mask weight* that ranks masks from 0 to 10 in terms of quantity of 1's.
 
 ```{r}
-# Data size filtering 
+# Data size filtering
 files$dim_x <- lapply(files$img,function(x){dim(x)['x']})|> unlist()
-files <- files[files[,'dim_x'] == 128,] 
+files <- files[files[,'dim_x'] == 128,]
 files$dim_y <- lapply(files$img,function(x){dim(x)['y']}) |> unlist()
 files <- files[files[,'dim_y'] == 128,]
 
 # Mask weight creation
 files$mask_weight <- unlist(lapply(files$mask,function(x){as.integer(10*round(mean(x),1))}))
-      #integer type enforced to be passed as strata parameter in the next step 
+      #integer type enforced to be passed as strata parameter in the next step
 ```
 
 We perform a data split with a stratification of our dataset using the *mask weight* created in the last step.
@@ -173,7 +172,7 @@ unet_tensor <- layer_conv_2d(unet_tensor,filters = 256,kernel_size = c(3,3), pad
 ##  this is where the expanding path begins ##
 
 # upsampling block 1
-unet_tensor <- layer_conv_2d_transpose(unet_tensor,filters = 128,kernel_size = c(2,2),strides = 2,padding = "same") 
+unet_tensor <- layer_conv_2d_transpose(unet_tensor,filters = 128,kernel_size = c(2,2),strides = 2,padding = "same")
 unet_tensor <- layer_concatenate(list(conc_tensor1,unet_tensor))
 unet_tensor <- layer_conv_2d(unet_tensor, filters = 128, kernel_size = c(3,3),padding = "same", activation = "relu")
 unet_tensor <- layer_conv_2d(unet_tensor, filters = 128, kernel_size = c(3,3),padding = "same", activation = "relu")
@@ -187,7 +186,7 @@ unet_tensor <- layer_conv_2d(unet_tensor, filters = 64, kernel_size = c(3,3),pad
 # output
 unet_tensor <- layer_conv_2d(unet_tensor,filters = 1,kernel_size = 1, activation = "sigmoid")
 
-# combine final unet_tensor (carrying all the transformations applied through the layers) 
+# combine final unet_tensor (carrying all the transformations applied through the layers)
 # with input_tensor to create model
 
 unet_model <- keras_model(inputs = input_tensor, outputs = unet_tensor)
@@ -219,7 +218,7 @@ plot(diagnostics)
 The model can be locally saved for further use:
 
 ```{r}
-#save_model_hdf5(unet_model,filepath = "./FloodsModel.h5")
+# save_model_hdf5(unet_model,filepath = "./FloodsModel.h5")
 ```
 
 ## II.3 Model prediction
@@ -243,7 +242,7 @@ img <- as.raster(testing(files_split)[image_num,c('img')][[1]][,,4:2]) |> magick
 
 out <- magick::image_append(c(
   magick::image_append(mask, stack = TRUE),
-  magick::image_append(img, stack = TRUE), 
+  magick::image_append(img, stack = TRUE),
   magick::image_append(pred_img, stack = TRUE)
 )
 )

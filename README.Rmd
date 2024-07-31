@@ -233,7 +233,8 @@ flood_model <- load_model_hdf5("./FloodsModel.h5")
 After loading the previously saved model, we select an image to be tested in this prediction stage. To assemble a visual comparison between the expected and the actual prediction (mask vs. predicted mask), we use of the `magick` library to stack these images.
 
 ```{r}
-image_num <- 925
+pred <- predict(object = flood_model,testing_dataset)
+image_num <- 54
 
 pred_img <- as.raster(pred[image_num,,,]) |> magick::image_read()
 mask <- as.raster(testing(files_split)[image_num,c('mask')][[1]]) |> magick::image_read()

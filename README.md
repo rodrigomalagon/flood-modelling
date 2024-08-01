@@ -253,25 +253,25 @@ diagnostics <- fit(unet_model,
                epochs = 10,
                validation_data = testing_dataset)
 #> Epoch 1/10
-#> 395/395 - 1288s - loss: 0.2086 - binary_accuracy: 0.9363 - val_loss: 0.1883 - val_binary_accuracy: 0.9492 - 1288s/epoch - 3s/step
+#> 395/395 - 1142s - loss: 0.1969 - binary_accuracy: 0.9388 - val_loss: 0.1894 - val_binary_accuracy: 0.9418 - 1142s/epoch - 3s/step
 #> Epoch 2/10
-#> 395/395 - 1150s - loss: 0.1731 - binary_accuracy: 0.9478 - val_loss: 0.1640 - val_binary_accuracy: 0.9479 - 1150s/epoch - 3s/step
+#> 395/395 - 1100s - loss: 0.1673 - binary_accuracy: 0.9490 - val_loss: 0.1897 - val_binary_accuracy: 0.9408 - 1100s/epoch - 3s/step
 #> Epoch 3/10
-#> 395/395 - 1116s - loss: 0.1667 - binary_accuracy: 0.9483 - val_loss: 0.1618 - val_binary_accuracy: 0.9510 - 1116s/epoch - 3s/step
+#> 395/395 - 1109s - loss: 0.1620 - binary_accuracy: 0.9495 - val_loss: 0.1737 - val_binary_accuracy: 0.9458 - 1109s/epoch - 3s/step
 #> Epoch 4/10
-#> 395/395 - 1116s - loss: 0.1578 - binary_accuracy: 0.9493 - val_loss: 0.1805 - val_binary_accuracy: 0.9465 - 1116s/epoch - 3s/step
+#> 395/395 - 1077s - loss: 0.1528 - binary_accuracy: 0.9502 - val_loss: 0.1754 - val_binary_accuracy: 0.9468 - 1077s/epoch - 3s/step
 #> Epoch 5/10
-#> 395/395 - 1124s - loss: 0.1494 - binary_accuracy: 0.9504 - val_loss: 0.1351 - val_binary_accuracy: 0.9537 - 1124s/epoch - 3s/step
+#> 395/395 - 1082s - loss: 0.1448 - binary_accuracy: 0.9516 - val_loss: 0.1537 - val_binary_accuracy: 0.9484 - 1082s/epoch - 3s/step
 #> Epoch 6/10
-#> 395/395 - 1163s - loss: 0.1448 - binary_accuracy: 0.9506 - val_loss: 0.1344 - val_binary_accuracy: 0.9539 - 1163s/epoch - 3s/step
+#> 395/395 - 1096s - loss: 0.1400 - binary_accuracy: 0.9518 - val_loss: 0.1617 - val_binary_accuracy: 0.9452 - 1096s/epoch - 3s/step
 #> Epoch 7/10
-#> 395/395 - 1150s - loss: 0.1391 - binary_accuracy: 0.9513 - val_loss: 0.1347 - val_binary_accuracy: 0.9533 - 1150s/epoch - 3s/step
+#> 395/395 - 1080s - loss: 0.1370 - binary_accuracy: 0.9525 - val_loss: 0.1487 - val_binary_accuracy: 0.9462 - 1080s/epoch - 3s/step
 #> Epoch 8/10
-#> 395/395 - 1178s - loss: 0.1380 - binary_accuracy: 0.9512 - val_loss: 0.1263 - val_binary_accuracy: 0.9544 - 1178s/epoch - 3s/step
+#> 395/395 - 1109s - loss: 0.1340 - binary_accuracy: 0.9521 - val_loss: 0.1484 - val_binary_accuracy: 0.9486 - 1109s/epoch - 3s/step
 #> Epoch 9/10
-#> 395/395 - 1186s - loss: 0.1358 - binary_accuracy: 0.9514 - val_loss: 0.1290 - val_binary_accuracy: 0.9523 - 1186s/epoch - 3s/step
+#> 395/395 - 1136s - loss: 0.1313 - binary_accuracy: 0.9523 - val_loss: 0.1586 - val_binary_accuracy: 0.9488 - 1136s/epoch - 3s/step
 #> Epoch 10/10
-#> 395/395 - 1187s - loss: 0.1327 - binary_accuracy: 0.9514 - val_loss: 0.1324 - val_binary_accuracy: 0.9507 - 1187s/epoch - 3s/step
+#> 395/395 - 1086s - loss: 0.1300 - binary_accuracy: 0.9521 - val_loss: 0.1399 - val_binary_accuracy: 0.9490 - 1086s/epoch - 3s/step
 
 plot(diagnostics)
 ```
@@ -300,9 +300,8 @@ of the `magick` library to stack these images.
 
 ``` r
 pred <- predict(object = flood_model,testing_dataset)
-#> 99/99 - 53s - 53s/epoch - 531ms/step
-image_num <- 54
-
+#> 99/99 - 51s - 51s/epoch - 512ms/step
+image_num <- 30
 pred_img <- as.raster(pred[image_num,,,]) |> magick::image_read()
 mask <- as.raster(testing(files_split)[image_num,c('mask')][[1]]) |> magick::image_read()
 img <- as.raster(testing(files_split)[image_num,c('img')][[1]][,,4:2]) |> magick::image_read()

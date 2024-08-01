@@ -225,6 +225,7 @@ The model can be locally saved for further use:
 
 In this stage we leverage the learned model to visually evaluate the class prediction on the testing tiles.
 
+
 ```{r}
 flood_model <- load_model_hdf5("./FloodsModel.h5")
 ```
@@ -233,8 +234,7 @@ After loading the previously saved model, we select an image to be tested in thi
 
 ```{r}
 pred <- predict(object = flood_model,testing_dataset)
-image_num <- 54
-
+image_num <- 30
 pred_img <- as.raster(pred[image_num,,,]) |> magick::image_read()
 mask <- as.raster(testing(files_split)[image_num,c('mask')][[1]]) |> magick::image_read()
 img <- as.raster(testing(files_split)[image_num,c('img')][[1]][,,4:2]) |> magick::image_read()
@@ -249,3 +249,18 @@ out <- magick::image_append(c(
 
 plot(out)
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
